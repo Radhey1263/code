@@ -7,9 +7,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-void main()
-{
-  runApp(const Q6Screen());
+void main() {
+  MaterialApp materialApp = MaterialApp(home:Q6Screen(),debugShowCheckedModeBanner:false);
+  runApp(materialApp);
 }
 
 class Q6Screen extends StatefulWidget {
@@ -82,9 +82,9 @@ class _Q6ScreenState extends State<Q6Screen> {
     SingleChildScrollView scrollView = SingleChildScrollView(child: col);
     Container container = Container(alignment: Alignment.center, child: scrollView);
     Scaffold scaffold = Scaffold(appBar: appBar, body: container);
-    MaterialApp materialApp = MaterialApp(home:scaffold,debugShowCheckedModeBanner:false);
+   
 
-    return materialApp;
+    return scaffold;
   }
 
   Future selectDate() async {
