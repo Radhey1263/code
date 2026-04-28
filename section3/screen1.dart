@@ -1,95 +1,61 @@
-//Screen-1 : Registration Screen
-
 import 'package:flutter/material.dart';
 
-class Screen1 extends StatelessWidget {
+class Screen1 extends StatefulWidget {
   const Screen1({super.key});
 
   @override
-  Widget build(BuildContext context)
-  {
-    TextEditingController tecName = TextEditingController();
-    TextEditingController tecEmail = TextEditingController();
-    TextEditingController tecUsername = TextEditingController();
-    TextEditingController tecPassword = TextEditingController();
+  State<Screen1> createState() => _Screen1State();
+}
 
-    TextStyle textStyle = TextStyle(fontSize:16,color:Colors.deepPurple);
-    OutlineInputBorder border = OutlineInputBorder(borderRadius:BorderRadius.circular(100));
+class _Screen1State extends State<Screen1> {
+  TextEditingController firstCtrl = TextEditingController();
+  TextEditingController lastCtrl = TextEditingController();
+  
+  String gender = "Male";
+  bool eng = true;
+  bool guj = false;
+  bool hin = false;
+  String output = "";
 
-    InputDecoration inputDecoration1 = InputDecoration(border:border,icon:Icon(Icons.person,size:30),
-        label:Text("Full Name"));
-    TextField tf1 = TextField(controller:tecName,style:textStyle,decoration:inputDecoration1);
+  @override
+  Widget build(BuildContext context) {
+    Text title = Text("Registration Form");
+    AppBar appBar = AppBar(title: title, backgroundColor: Colors.lightBlue);
 
-    InputDecoration inputDecoration2 = InputDecoration(border:border,icon:Icon(Icons.email,size:30),
-        label:Text("Email"));
-    TextField tf2 = TextField(controller:tecEmail,style:textStyle,decoration:inputDecoration2);
+    OutlineInputBorder border = OutlineInputBorder();
+    TextField firstTF = TextField(controller: firstCtrl, decoration: InputDecoration(border: border, labelText: "Firstname"));
+    TextField lastTF = TextField(controller: lastCtrl, decoration: InputDecoration(border: border, labelText: "Lastname"));
 
-    InputDecoration inputDecoration3 = InputDecoration(border:border,icon:Icon(Icons.account_circle,size:30),
-        label:Text("Username"));
-    TextField tf3 = TextField(controller:tecUsername,style:textStyle,decoration:inputDecoration3);
+    Text genTxt = Text("Gender:");
+    RadioListTile r1 = RadioListTile(title: Text("Male"), value: "Male", groupValue: gender, onChanged: (val) { setState(() { gender = val.toString(); }); });
+    RadioListTile r2 = RadioListTile(title: Text("Female"), value: "Female", groupValue: gender, onChanged: (val) { setState(() { gender = val.toString(); }); });
+    RadioListTile r3 = RadioListTile(title: Text("Other"), value: "Other", groupValue: gender, onChanged: (val) { setState(() { gender = val.toString(); }); });
 
-    InputDecoration inputDecoration4 = InputDecoration(border:border,icon:Icon(Icons.password_outlined,size:30),
-        label:Text("Password"));
-    TextField tf4 = TextField(controller:tecPassword,obscureText:true,style:textStyle,decoration:inputDecoration4);
+    Text langTxt = Text("Languages known:");
+    CheckboxListTile c1 = CheckboxListTile(title: Text("English"), value: eng, onChanged: (val) { setState(() { eng = val!; }); });
+    CheckboxListTile c2 = CheckboxListTile(title: Text("Gujarati"), value: guj, onChanged: (val) { setState(() { guj = val!; }); });
+    CheckboxListTile c3 = CheckboxListTile(title: Text("Hindi"), value: hin, onChanged: (val) { setState(() { hin = val!; }); });
 
-    SizedBox sizedBox = SizedBox(height:20);
+    ElevatedButton btn = ElevatedButton(onPressed: () {
+      setState(() {
+        String langs = "";
+        if (eng) langs += "English ";
+        if (guj) langs += "Gujarati ";
+        if (hin) langs += "Hindi ";
+        output = "Name: ${firstCtrl.text} ${lastCtrl.text}\nGender: $gender\nLangs: $langs";
+      });
+      Navigator.pushNamed(context, '/s2');
+    }, child: Text("Register"));
 
-    ElevatedButton btnRegister = ElevatedButton(onPressed:(){
-
-      String name = tecName.text;
-      String email = tecEmail.text;
-      String username = tecUsername.text;
-      String password = tecPassword.text;
-
-      if(name.isNotEmpty && email.isNotEmpty && username.isNotEmpty && password.isNotEmpty)
-      {
-        debugPrint("Registration Successful!");
-        debugPrint("Name: $name, Email: $email, Username: $username");
-
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content:Text("Registration Successful! Go to Login."))
-        );
-
-        Navigator.pushNamed(context,"/s2");
-      }
-      else
-      {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content:Text("Please fill all fields!"))
-        );
-      }
-
-    } , child:Text("Register"));
-
-    ElevatedButton btnReset = ElevatedButton(onPressed:(){
-
-      tecName.clear();
-      tecEmail.clear();
-      tecUsername.clear();
-      tecPassword.clear();
-
-    } , child:Text("Reset"));
-
-    ElevatedButton btnGoToLogin = ElevatedButton(onPressed:(){
-
-      Navigator.pushNamed(context,"/s2");
-
-    } , child:Text("Already have account? Login"));
-
-    Row row = Row(mainAxisAlignment:MainAxisAlignment.center,children: [btnRegister,SizedBox(width:20),btnReset]);
-
-    Column column = Column(mainAxisAlignment:MainAxisAlignment.center,children: [
-      tf1,sizedBox,tf2,sizedBox,tf3,sizedBox,tf4,sizedBox,row,sizedBox,btnGoToLogin
-    ]);
-
-    Padding padding = Padding(padding:EdgeInsets.all(20),child:column);
-
-    Center center = Center(child:padding);
-
-    AppBar appBar = AppBar(title:Text("Registration"),backgroundColor:Colors.lightBlue);
-
-    Scaffold scaffold = Scaffold(appBar:appBar,body:center,backgroundColor:Colors.cyan.shade50);
-
+    Text outTxt = Text(output);
+    SizedBox space = SizedBox(height: 10);
+    
+    Column col = Column(children: [firstTF, space, lastTF, space, genTxt, r1, r2, r3, space, langTxt, c1, c2, c3, space, btn, space, outTxt]);
+    
+    SingleChildScrollView scroll = SingleChildScrollView(child: col);
+    Container container = Container(alignment: Alignment.center, child: scroll);
+    Scaffold scaffold = Scaffold(appBar: appBar, body: container);
+    
     return scaffold;
   }
 }

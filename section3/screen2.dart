@@ -1,83 +1,52 @@
-//Screen-2 : Login Screen
-
 import 'package:flutter/material.dart';
 
-class Screen2 extends StatelessWidget {
+class Screen2 extends StatefulWidget {
   const Screen2({super.key});
 
   @override
-  Widget build(BuildContext context)
-  {
-    TextEditingController tecUsername = TextEditingController();
-    TextEditingController tecPassword = TextEditingController();
+  State<Screen2> createState() => _Screen2State();
+}
 
-    TextStyle textStyle = TextStyle(fontSize:16,color:Colors.deepPurple);
-    OutlineInputBorder border = OutlineInputBorder(borderRadius:BorderRadius.circular(100));
+class _Screen2State extends State<Screen2> {
+  TextEditingController userCtrl = TextEditingController();
+  TextEditingController passCtrl = TextEditingController();
+  String screenState = "Login"; // "Login", "Error"
 
-    InputDecoration inputDecoration1 = InputDecoration(border:border,icon:Icon(Icons.person,size:30),
-        label:Text("Username"));
-    TextField tf1 = TextField(controller:tecUsername,style:textStyle,decoration:inputDecoration1);
+  @override
+  Widget build(BuildContext context) {
+    if (screenState == "Error") {
+      Text errorTitle = Text("Error");
+      AppBar errorAppBar = AppBar(title: errorTitle, backgroundColor: Colors.red);
+      Text errorMsg = Text("Invalid Credentials", style: TextStyle(fontSize: 20));
+      ElevatedButton tryBtn = ElevatedButton(onPressed: () { setState(() { screenState = "Login"; }); }, child: Text("Try again"));
+      Column errorCol = Column(mainAxisAlignment: MainAxisAlignment.center, children: [errorMsg, SizedBox(height: 20), tryBtn]);
+      Container errorContainer = Container(alignment: Alignment.center, child: errorCol);
+      Scaffold errorScaffold = Scaffold(appBar: errorAppBar, body: errorContainer);
+      return errorScaffold;
+    }
 
-    InputDecoration inputDecoration2 = InputDecoration(border:border,icon:Icon(Icons.password_outlined,size:30),
-        label:Text("Password"));
-    TextField tf2 = TextField(controller:tecPassword,obscureText:true,style:textStyle,decoration:inputDecoration2);
+    Text title = Text("Login");
+    AppBar appBar = AppBar(title: title, backgroundColor: Colors.lightBlue);
 
-    SizedBox sizedBox = SizedBox(height:20);
+    OutlineInputBorder border = OutlineInputBorder();
+    TextField userTF = TextField(controller: userCtrl, decoration: InputDecoration(border: border, labelText: "Username"));
+    TextField passTF = TextField(controller: passCtrl, obscureText: true, decoration: InputDecoration(border: border, labelText: "Password"));
 
-    ElevatedButton btnLogin = ElevatedButton(onPressed:(){
-
-      String username = tecUsername.text;
-      String password = tecPassword.text;
-
-      if(username=="admin" && password=="admin")
-      {
-        debugPrint("Login Successful!");
-
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content:Text("Login Successful! Welcome $username"))
-        );
-
-        Navigator.pushNamed(context,"/s3");
+    ElevatedButton btn = ElevatedButton(onPressed: () {
+      if (userCtrl.text == "admin" && passCtrl.text == "admin") {
+        Navigator.pushNamed(context, '/s3');
+      } else {
+        setState(() {
+          screenState = "Error";
+        });
       }
-      else
-      {
-        debugPrint("Login Failed. Try again.");
+    }, child: Text("Login"));
 
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content:Text("Invalid Username or Password! Try again."))
-        );
+    SizedBox space = SizedBox(height: 20);
+    Column col = Column(mainAxisAlignment: MainAxisAlignment.center, children: [userTF, space, passTF, space, btn]);
 
-        tecPassword.clear();
-      }
-
-    } , child:Text("Login"));
-
-    ElevatedButton btnReset = ElevatedButton(onPressed:(){
-
-      tecUsername.clear();
-      tecPassword.clear();
-
-    } , child:Text("Reset"));
-
-    ElevatedButton btnGoToRegister = ElevatedButton(onPressed:(){
-
-      Navigator.pushNamed(context,"/s1");
-
-    } , child:Text("Don't have account? Register"));
-
-    Row row = Row(mainAxisAlignment:MainAxisAlignment.center,children: [btnLogin,SizedBox(width:20),btnReset]);
-
-    Column column = Column(mainAxisAlignment:MainAxisAlignment.center,children: [
-      tf1,sizedBox,tf2,sizedBox,row,sizedBox,btnGoToRegister
-    ]);
-
-    Padding padding = Padding(padding:EdgeInsets.all(20),child:column);
-
-    Center center = Center(child:padding);
-
-    AppBar appBar = AppBar(title:Text("Login"),backgroundColor:Colors.lightBlue);
-
-    Scaffold scaffold = Scaffold(appBar:appBar,body:center,backgroundColor:Colors.blue.shade50);
+    Container container = Container(alignment: Alignment.center, child: col);
+    Scaffold scaffold = Scaffold(appBar: appBar, body: container);
 
     return scaffold;
   }
