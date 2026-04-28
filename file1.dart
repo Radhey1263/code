@@ -13,7 +13,8 @@ import 'package:intl/intl.dart';
 
 void main()
 {
-  runApp(const Q1Screen());
+  MaterialApp materialApp = MaterialApp(home: Q1Screen(), debugShowCheckedModeBanner: false);
+  runApp(materialApp);
 }
 
 class Q1Screen extends StatefulWidget {
@@ -73,9 +74,8 @@ class _Q1ScreenState extends State<Q1Screen> {
     SingleChildScrollView scrollView = SingleChildScrollView(child: column);
     Container container = Container(alignment: Alignment.center, child: scrollView);
     Scaffold scaffold = Scaffold(appBar: appBar, body: container);
-    MaterialApp materialApp = MaterialApp(home:scaffold,debugShowCheckedModeBanner:false);
 
-    return materialApp;
+    return scaffold;
   }
 
   Future selectDate() async {

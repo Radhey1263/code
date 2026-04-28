@@ -10,7 +10,8 @@ import 'package:intl/intl.dart';
 
 void main()
 {
-  runApp(const Q5Screen());
+  MaterialApp materialApp = MaterialApp(home: Q5Screen(), debugShowCheckedModeBanner: false);
+  runApp(materialApp);
 }
 
 class Q5Screen extends StatefulWidget {
@@ -114,9 +115,8 @@ class _Q5ScreenState extends State<Q5Screen> {
     SingleChildScrollView scroll = SingleChildScrollView(child: col);
     Container container = Container(alignment: Alignment.center, padding: EdgeInsets.all(8), child: scroll);
     Scaffold scaffold = Scaffold(appBar: appBar, body: container);
-    MaterialApp materialApp = MaterialApp(home:scaffold,debugShowCheckedModeBanner:false);
 
-    return materialApp;
+    return scaffold;
   }
 
   Future selectDate() async {
