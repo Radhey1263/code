@@ -1,0 +1,122 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp>
+{
+
+  bool all=false;
+  bool pizza=false;
+  bool fries=false;
+  bool drink=false;
+
+  String items="";
+  int total=0;
+
+  void calculate()
+  {
+    items="";
+    total=0;
+
+    if(pizza)
+    {
+      items += "Pizza ";
+      total += 250;
+    }
+
+    if(fries)
+    {
+      items += "French Fries ";
+      total += 80;
+    }
+
+    if(drink)
+    {
+      items += "Colddrink ";
+      total += 50;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context)
+  {
+
+    CheckboxListTile cAll = CheckboxListTile(
+      title: Text("Select All"),
+      value: all,
+      onChanged: (value){
+        setState(() {
+          all = value!;
+
+          pizza = all;
+          fries = all;
+          drink = all;
+
+          calculate();
+        });
+      },
+    );
+
+    CheckboxListTile c1 = CheckboxListTile(
+      title: Text("Pizza (Rs.250)"),
+      value: pizza,
+      onChanged: (value){
+        setState(() {
+          pizza=value!;
+          calculate();
+        });
+      },
+    );
+
+    CheckboxListTile c2 = CheckboxListTile(
+      title: Text("French Fries (Rs.80)"),
+      value: fries,
+      onChanged: (value){
+        setState(() {
+          fries=value!;
+          calculate();
+        });
+      },
+    );
+
+    CheckboxListTile c3 = CheckboxListTile(
+      title: Text("Colddrink (Rs.50)"),
+      value: drink,
+      onChanged: (value){
+        setState(() {
+          drink=value!;
+          calculate();
+        });
+      },
+    );
+
+    Text t1 = Text("Selected Items: $items");
+    Text t2 = Text("Total Price: Rs. $total");
+
+    Column column = Column(
+      children: [cAll,c1,c2,c3,t1,t2],
+    );
+
+    Scaffold scaffold = Scaffold(
+      appBar: AppBar(title: Text("Food Order"), backgroundColor: Colors.lightBlue),
+      body: column,
+    );
+
+    MaterialApp materialApp = MaterialApp(
+        home: scaffold,
+        debugShowCheckedModeBanner: false
+    );
+
+    return materialApp;
+
+  }
+}

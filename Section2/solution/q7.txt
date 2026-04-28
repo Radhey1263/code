@@ -1,0 +1,139 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp>
+{
+
+  int bStock=30;
+  int lStock=40;
+  int dStock=30;
+
+  int bSold=0;
+  int lSold=0;
+  int dSold=0;
+
+  int bQty=1;
+  int lQty=1;
+  int dQty=1;
+
+  int totalSale=0;
+
+  @override
+  Widget build(BuildContext context)
+  {
+
+    DropdownButton bDrop = DropdownButton(
+        value: bQty,
+        items: [1,2,3,4,5].map((e) => DropdownMenuItem(value:e, child: Text("$e"))).toList(),
+        onChanged: (value){
+          setState(() { bQty = value as int; });
+        }
+    );
+
+    DropdownButton lDrop = DropdownButton(
+        value: lQty,
+        items: [1,2,3,4,5].map((e) => DropdownMenuItem(value:e, child: Text("$e"))).toList(),
+        onChanged: (value){
+          setState(() { lQty = value as int; });
+        }
+    );
+
+    DropdownButton dDrop = DropdownButton(
+        value: dQty,
+        items: [1,2,3,4,5].map((e) => DropdownMenuItem(value:e, child: Text("$e"))).toList(),
+        onChanged: (value){
+          setState(() { dQty = value as int; });
+        }
+    );
+
+    int bPrice = bQty * 40;
+    int lPrice = lQty * 80;
+    int dPrice = dQty * 60;
+
+    ElevatedButton bBtn = ElevatedButton(
+        onPressed: (){
+          setState(() {
+            bStock -= bQty;
+            bSold += bQty;
+            totalSale += bPrice;
+          });
+        },
+        child: Text("Place Order")
+    );
+
+    ElevatedButton lBtn = ElevatedButton(
+        onPressed: (){
+          setState(() {
+            lStock -= lQty;
+            lSold += lQty;
+            totalSale += lPrice;
+          });
+        },
+        child: Text("Place Order")
+    );
+
+    ElevatedButton dBtn = ElevatedButton(
+        onPressed: (){
+          setState(() {
+            dStock -= dQty;
+            dSold += dQty;
+            totalSale += dPrice;
+          });
+        },
+        child: Text("Place Order")
+    );
+
+    Badge bBadge = Badge.count(count: bStock, child: Text("Breakfast Left"));
+    Badge lBadge = Badge.count(count: lStock, child: Text("Lunch Left"));
+    Badge dBadge = Badge.count(count: dStock, child: Text("Dinner Left"));
+
+    Column column = Column(
+      children: [
+
+        Text("Breakfast"),
+        bDrop,
+        Text("Price = $bPrice"),
+        bBtn,
+        bBadge,
+
+        Text("Lunch"),
+        lDrop,
+        Text("Price = $lPrice"),
+        lBtn,
+        lBadge,
+
+        Text("Dinner"),
+        dDrop,
+        Text("Price = $dPrice"),
+        dBtn,
+        dBadge,
+
+        Text("Total Sale = $totalSale"),
+
+      ],
+    );
+
+    Scaffold scaffold = Scaffold(
+      appBar: AppBar(title: Text("Food Shop"), backgroundColor: Colors.lightBlue),
+      body: column,
+    );
+
+    MaterialApp materialApp = MaterialApp(
+        home: scaffold,
+        debugShowCheckedModeBanner: false
+    );
+
+    return materialApp;
+
+  }
+}

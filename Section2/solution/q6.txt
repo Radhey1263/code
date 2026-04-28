@@ -1,0 +1,150 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp>
+{
+
+  DateTime selectedDate = DateTime.now();
+
+  String slot = "10 to 11";
+
+  List<String> bookings = [];
+
+  int count = 0;
+
+  String message = "";
+
+  @override
+  Widget build(BuildContext context)
+  {
+
+    IconButton dateBtn = IconButton(
+        onPressed: (){ selectDate(); },
+        icon: Icon(Icons.calendar_month)
+    );
+
+    DropdownButton dropdown = DropdownButton(
+        value: slot,
+        items: [
+          DropdownMenuItem(value:"10 to 11", child: Text("10 to 11")),
+          DropdownMenuItem(value:"11 to 12", child: Text("11 to 12")),
+          DropdownMenuItem(value:"12 to 1", child: Text("12 to 1")),
+          DropdownMenuItem(value:"4 to 5", child: Text("4 to 5")),
+          DropdownMenuItem(value:"5 to 6", child: Text("5 to 6")),
+          DropdownMenuItem(value:"6 to 7", child: Text("6 to 7")),
+        ],
+        onChanged: (value){
+          setState(() {
+            slot = value.toString();
+          });
+        }
+    );
+
+    ElevatedButton book = ElevatedButton(
+        onPressed: (){
+
+          String date = "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}";
+          String entry = "$date - $slot";
+
+          if(bookings.contains(entry))
+          {
+            setState(() {
+              message = "Slot not available";
+            });
+          }
+          else
+          {
+            setState(() {
+              bookings.add(entry);
+              count = bookings.length;
+              message = "";
+            });
+          }
+
+        },
+        child: Text("Book")
+    );
+
+    ElevatedButton reset = ElevatedButton(
+        onPressed: (){
+          setState(() {
+            bookings.clear();
+            count = 0;
+            message = "";
+          });
+        },
+        child: Text("Reset")
+    );
+
+    Row btnRow = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [book, SizedBox(width:20), reset],
+    );
+
+    ListView listView = ListView.builder(
+        itemCount: bookings.length,
+        itemBuilder: (context,index){
+
+          ListTile listTile = ListTile(
+            title: Text(bookings[index]),
+          );
+
+          return listTile;
+        }
+    );
+
+    Expanded expanded = Expanded(child: listView);
+
+    Text msgText = Text(message, style: TextStyle(color: Colors.red));
+
+    Badge badge = Badge.count(count: count, child: Icon(Icons.event));
+
+    Column column = Column(
+      children: [
+        dateBtn,
+        dropdown,
+        btnRow,
+        badge,
+        expanded,
+        msgText
+      ],
+    );
+
+    Scaffold scaffold = Scaffold(
+      appBar: AppBar(title: Text("Appointment Booking"), backgroundColor: Colors.lightBlue),
+      body: column,
+    );
+
+    MaterialApp materialApp = MaterialApp(
+        home: scaffold,
+        debugShowCheckedModeBanner: false
+    );
+
+    return materialApp;
+
+  }
+
+  Future selectDate() async {
+    DateTime? pickedDate = await showDatePicker(
+        context: context,
+        firstDate: DateTime.now(),
+        lastDate: DateTime.now()
+    );
+
+    if(pickedDate != null){
+      setState(() {
+        selectedDate = pickedDate;
+      });
+    }
+  }
+}

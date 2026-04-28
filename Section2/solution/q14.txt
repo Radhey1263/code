@@ -1,0 +1,106 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp>
+{
+
+  String stateValue = "Gujarat";
+  String cityValue = "";
+
+  @override
+  Widget build(BuildContext context)
+  {
+
+    DropdownButton stateDropdown = DropdownButton(
+        value: stateValue,
+        items: [
+          DropdownMenuItem(value:"Gujarat", child: Text("Gujarat")),
+          DropdownMenuItem(value:"Maharashtra", child: Text("Maharashtra")),
+        ],
+        onChanged: (value){
+          setState(() {
+            stateValue = value.toString();
+            cityValue = "";
+          });
+        }
+    );
+
+    Column cityColumn;
+
+    if(stateValue=="Gujarat")
+    {
+      cityColumn = Column(
+        children: [
+          RadioListTile(
+              title: Text("Ahmedabad"),
+              value: "Ahmedabad",
+              groupValue: cityValue,
+              onChanged: (value){
+                setState(() { cityValue = value.toString(); });
+              }
+          ),
+          RadioListTile(
+              title: Text("Surat"),
+              value: "Surat",
+              groupValue: cityValue,
+              onChanged: (value){
+                setState(() { cityValue = value.toString(); });
+              }
+          ),
+        ],
+      );
+    }
+    else
+    {
+      cityColumn = Column(
+        children: [
+          RadioListTile(
+              title: Text("Mumbai"),
+              value: "Mumbai",
+              groupValue: cityValue,
+              onChanged: (value){
+                setState(() { cityValue = value.toString(); });
+              }
+          ),
+          RadioListTile(
+              title: Text("Pune"),
+              value: "Pune",
+              groupValue: cityValue,
+              onChanged: (value){
+                setState(() { cityValue = value.toString(); });
+              }
+          ),
+        ],
+      );
+    }
+
+    Text result = Text("Selected: $stateValue - $cityValue");
+
+    Column column = Column(
+      children: [stateDropdown, cityColumn, result],
+    );
+
+    Scaffold scaffold = Scaffold(
+      appBar: AppBar(title: Text("State City Selection"), backgroundColor: Colors.lightBlue),
+      body: column,
+    );
+
+    MaterialApp materialApp = MaterialApp(
+        home: scaffold,
+        debugShowCheckedModeBanner: false
+    );
+
+    return materialApp;
+
+  }
+}

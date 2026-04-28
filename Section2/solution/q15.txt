@@ -1,0 +1,130 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp>
+{
+
+  TextEditingController fname = TextEditingController();
+  TextEditingController lname = TextEditingController();
+
+  String gender = "";
+
+  bool lang1=false;
+  bool lang2=false;
+  bool lang3=false;
+
+  TextEditingController output = TextEditingController();
+
+  @override
+  Widget build(BuildContext context)
+  {
+
+    TextField tf1 = TextField(
+      controller: fname,
+      decoration: InputDecoration(labelText:"First Name",border:OutlineInputBorder()),
+    );
+
+    TextField tf2 = TextField(
+      controller: lname,
+      decoration: InputDecoration(labelText:"Last Name",border:OutlineInputBorder()),
+    );
+
+    RadioListTile r1 = RadioListTile(
+        title: Text("Male"),
+        value: "Male",
+        groupValue: gender,
+        onChanged: (value){
+          setState(() { gender = value.toString(); });
+        }
+    );
+
+    RadioListTile r2 = RadioListTile(
+        title: Text("Female"),
+        value: "Female",
+        groupValue: gender,
+        onChanged: (value){
+          setState(() { gender = value.toString(); });
+        }
+    );
+
+    CheckboxListTile c1 = CheckboxListTile(
+      title: Text("English"),
+      value: lang1,
+      onChanged: (value){
+        setState(() { lang1=value!; });
+      },
+    );
+
+    CheckboxListTile c2 = CheckboxListTile(
+      title: Text("Hindi"),
+      value: lang2,
+      onChanged: (value){
+        setState(() { lang2=value!; });
+      },
+    );
+
+    CheckboxListTile c3 = CheckboxListTile(
+      title: Text("Gujarati"),
+      value: lang3,
+      onChanged: (value){
+        setState(() { lang3=value!; });
+      },
+    );
+
+    ElevatedButton btn = ElevatedButton(
+        onPressed: (){
+
+          String langs="";
+
+          if(lang1) langs += "English ";
+          if(lang2) langs += "Hindi ";
+          if(lang3) langs += "Gujarati ";
+
+          output.text =
+          "Name: ${fname.text} ${lname.text}\nGender: $gender\nLanguages: $langs";
+
+        },
+        child: Text("Register")
+    );
+
+    TextField result = TextField(
+      controller: output,
+      maxLines: 4,
+      readOnly: true,
+      decoration: InputDecoration(border: OutlineInputBorder()),
+    );
+
+    Column column = Column(
+      children: [
+        tf1,tf2,
+        r1,r2,
+        c1,c2,c3,
+        btn,
+        result
+      ],
+    );
+
+    Scaffold scaffold = Scaffold(
+      appBar: AppBar(title: Text("Registration Form"), backgroundColor: Colors.lightBlue),
+      body: column,
+    );
+
+    MaterialApp materialApp = MaterialApp(
+        home: scaffold,
+        debugShowCheckedModeBanner: false
+    );
+
+    return materialApp;
+
+  }
+}

@@ -1,0 +1,79 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp>
+{
+
+  TextEditingController amount = TextEditingController();
+  TextEditingController rate = TextEditingController();
+  TextEditingController time = TextEditingController();
+
+  double emi = 0;
+
+  @override
+  Widget build(BuildContext context)
+  {
+
+    TextField tf1 = TextField(
+      controller: amount,
+      decoration: InputDecoration(labelText:"Loan Amount",border:OutlineInputBorder()),
+      keyboardType: TextInputType.number,
+    );
+
+    TextField tf2 = TextField(
+      controller: rate,
+      decoration: InputDecoration(labelText:"Interest Rate",border:OutlineInputBorder()),
+      keyboardType: TextInputType.number,
+    );
+
+    TextField tf3 = TextField(
+      controller: time,
+      decoration: InputDecoration(labelText:"Time (Years)",border:OutlineInputBorder()),
+      keyboardType: TextInputType.number,
+    );
+
+    ElevatedButton btn = ElevatedButton(
+        onPressed: (){
+
+          double p = double.parse(amount.text);
+          double r = double.parse(rate.text) / 12 / 100;
+          double t = double.parse(time.text) * 12;
+
+          setState(() {
+            emi = (p * r * (1 + r) * t) / ((1 + r) * t - 1);
+          });
+
+        },
+        child: Text("Calculate EMI")
+    );
+
+    Text result = Text("EMI = $emi");
+
+    Column column = Column(
+      children: [tf1,tf2,tf3,btn,result],
+    );
+
+    Scaffold scaffold = Scaffold(
+      appBar: AppBar(title: Text("EMI Calculator"), backgroundColor: Colors.lightBlue),
+      body: column,
+    );
+
+    MaterialApp materialApp = MaterialApp(
+        home: scaffold,
+        debugShowCheckedModeBanner: false
+    );
+
+    return materialApp;
+
+  }
+}

@@ -1,0 +1,173 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp>
+{
+
+  List<String> selected = [];
+  List<String> booked = [];
+
+  int totalBooked = 0;
+  int totalAvailable = 15;
+  int totalEarning = 0;
+
+  Widget seat(String name, int price)
+  {
+    Color color = Colors.grey;
+
+    if(booked.contains(name))
+      color = Colors.red;
+    else if(selected.contains(name))
+      color = Colors.yellow;
+
+    return GestureDetector(
+      onTap: (){
+        setState(() {
+
+          if(booked.contains(name))
+          {
+            selected.add(name);
+          }
+          else
+          {
+            if(selected.contains(name))
+              selected.remove(name);
+            else
+              selected.add(name);
+          }
+
+        });
+      },
+      child: Container(
+        margin: EdgeInsets.all(5),
+        padding: EdgeInsets.all(10),
+        color: color,
+        child: Text(name),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context)
+  {
+
+    Row rowA = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        seat("A1",800), seat("A2",800), seat("A3",800), seat("A4",800), seat("A5",800),
+      ],
+    );
+
+    Row rowB = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        seat("B1",600), seat("B2",600), seat("B3",600), seat("B4",600), seat("B5",600),
+      ],
+    );
+
+    Row rowC = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        seat("C1",500), seat("C2",500), seat("C3",500), seat("C4",500), seat("C5",500),
+      ],
+    );
+
+    ElevatedButton book = ElevatedButton(
+        onPressed: (){
+          setState(() {
+
+            for(String s in selected)
+            {
+              if(!booked.contains(s))
+              {
+                booked.add(s);
+
+                if(s.startsWith("A"))
+                  totalEarning += 800;
+                else if(s.startsWith("B"))
+                  totalEarning += 600;
+                else
+                  totalEarning += 500;
+              }
+            }
+
+            selected.clear();
+
+            totalBooked = booked.length;
+            totalAvailable = 15 - totalBooked;
+
+          });
+        },
+        child: Text("Book")
+    );
+
+    ElevatedButton release = ElevatedButton(
+        onPressed: (){
+          setState(() {
+
+            for(String s in selected)
+            {
+              if(booked.contains(s))
+              {
+                booked.remove(s);
+
+                if(s.startsWith("A"))
+                  totalEarning -= 800;
+                else if(s.startsWith("B"))
+                  totalEarning -= 600;
+                else
+                  totalEarning -= 500;
+              }
+            }
+
+            selected.clear();
+
+            totalBooked = booked.length;
+            totalAvailable = 15 - totalBooked;
+
+          });
+        },
+        child: Text("Release")
+    );
+
+    Row btnRow = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [book, SizedBox(width:20), release],
+    );
+
+    Column column = Column(
+      children: [
+        rowA,
+        rowB,
+        rowC,
+        btnRow,
+        Text("Total seats booked: $totalBooked"),
+        Text("Total seats available: $totalAvailable"),
+        Text("Total Earning Rs. $totalEarning"),
+      ],
+    );
+
+    Scaffold scaffold = Scaffold(
+      appBar: AppBar(title: Text("Seat Booking"), backgroundColor: Colors.lightBlue),
+      body: column,
+    );
+
+    MaterialApp materialApp = MaterialApp(
+        home: scaffold,
+        debugShowCheckedModeBanner: false
+    );
+
+    return materialApp;
+
+  }
+}

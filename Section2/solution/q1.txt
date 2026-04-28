@@ -1,0 +1,113 @@
+question 1...........
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MaterialApp(home: MyApp(), debugShowCheckedModeBanner: false));
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  TextEditingController tec1 = TextEditingController();
+  TextEditingController outputController = TextEditingController();
+
+  DateTime selectedDate = DateTime.now();
+
+  bool v1=false;
+  bool v2=false;
+  bool v3=false;
+
+  @override
+  Widget build(BuildContext context) {
+
+    TextField tf1 = TextField(
+      controller: tec1,
+      decoration: InputDecoration(labelText: "Student ID", border: OutlineInputBorder()),
+    );
+
+    IconButton iconButton = IconButton(
+        onPressed: () { selectDate(); },
+        icon: Icon(Icons.calendar_month)
+    );
+
+    CheckboxListTile c1 = CheckboxListTile(
+      title: Text("Flutter"),
+      value: v1,
+      onChanged: (value){
+        setState(() { v1=value!; });
+      },
+    );
+
+    CheckboxListTile c2 = CheckboxListTile(
+      title: Text("Java"),
+      value: v2,
+      onChanged: (value){
+        setState(() { v2=value!; });
+      },
+    );
+
+    CheckboxListTile c3 = CheckboxListTile(
+      title: Text(".NET"),
+      value: v3,
+      onChanged: (value){
+        setState(() { v3=value!; });
+      },
+    );
+
+    ElevatedButton btn = ElevatedButton(
+        onPressed: (){
+
+          String skills="";
+          if(v1) skills += "Flutter ";
+          if(v2) skills += "Java ";
+          if(v3) skills += ".NET ";
+
+          // 👇 manual date (same logic, no intl)
+          String date = "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}";
+
+          outputController.text =
+          "Student Id: ${tec1.text}\nDate of Birth: $date\nSkills: $skills";
+
+        },
+        child: Text("Show")
+    );
+
+    TextField output = TextField(
+      controller: outputController,
+      maxLines: 4,
+      readOnly: true,
+      decoration: InputDecoration(border: OutlineInputBorder()),
+    );
+
+    Column column = Column(
+      children: [tf1, iconButton, c1, c2, c3, btn, output],
+    );
+
+    Scaffold scaffold = Scaffold(
+      appBar: AppBar(title: Text("Student Form")),
+      body: column,
+    );
+
+    return scaffold;
+  }
+
+  Future selectDate() async {
+    DateTime? pickedDate = await showDatePicker(
+        context: context,
+        firstDate: DateTime(2000),
+        lastDate: DateTime(2030)
+    );
+
+    if(pickedDate != null){
+      setState(() {
+        selectedDate = pickedDate;
+      });
+    }
+  }
+}

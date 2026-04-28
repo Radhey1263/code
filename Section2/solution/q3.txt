@@ -1,0 +1,147 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context)
+  {
+    return MaterialApp(
+      home: Login(),
+      debugShowCheckedModeBanner: false,
+    );
+  }
+}
+
+class Login extends StatefulWidget {
+  const Login({super.key});
+
+  @override
+  State<Login> createState() => _LoginState();
+}
+
+class _LoginState extends State<Login>
+{
+
+  TextEditingController tec1 = TextEditingController();
+  TextEditingController p1 = TextEditingController();
+  TextEditingController p2 = TextEditingController();
+  TextEditingController p3 = TextEditingController();
+  TextEditingController p4 = TextEditingController();
+
+  @override
+  Widget build(BuildContext context)
+  {
+
+    TextField tf1 = TextField(
+      controller: tec1,
+      decoration: InputDecoration(
+          labelText: "Username",
+          border: OutlineInputBorder()
+      ),
+    );
+
+    SizedBox sizedBox = SizedBox(height:20);
+
+    Row rowPin = Row(
+      children: [
+
+        Expanded(child: TextField(controller: p1, maxLength: 1, keyboardType: TextInputType.number)),
+        Expanded(child: TextField(controller: p2, maxLength: 1, keyboardType: TextInputType.number)),
+        Expanded(child: TextField(controller: p3, maxLength: 1, keyboardType: TextInputType.number)),
+        Expanded(child: TextField(controller: p4, maxLength: 1, keyboardType: TextInputType.number)),
+
+      ],
+    );
+
+    SizedBox sizedBox2 = SizedBox(height:20);
+
+    ElevatedButton btnLogin = ElevatedButton(
+        onPressed: (){
+
+          String username = tec1.text;
+          String pin = p1.text + p2.text + p3.text + p4.text;
+
+          if(username=="admin" && pin=="2121")
+          {
+            Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context)=>Welcome())
+            );
+          }
+          else
+          {
+            p1.clear();
+            p2.clear();
+            p3.clear();
+            p4.clear();
+          }
+
+        },
+        child: Text("Login")
+    );
+
+    ElevatedButton btnReset = ElevatedButton(
+        onPressed: (){
+          tec1.clear();
+          p1.clear();
+          p2.clear();
+          p3.clear();
+          p4.clear();
+        },
+        child: Text("Reset")
+    );
+
+    Row rowBtn = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [btnLogin, SizedBox(width:20), btnReset],
+    );
+
+    Column column = Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [tf1, sizedBox, rowPin, sizedBox2, rowBtn],
+    );
+
+    Container container = Container(
+      alignment: Alignment.center,
+      child: column,
+    );
+
+    AppBar appBar = AppBar(
+      title: Text("Login"),
+      backgroundColor: Colors.lightBlue,
+    );
+
+    Scaffold scaffold = Scaffold(
+      appBar: appBar,
+      body: container,
+    );
+
+    return scaffold;
+
+  }
+}
+
+class Welcome extends StatelessWidget {
+  const Welcome({super.key});
+
+  @override
+  Widget build(BuildContext context)
+  {
+
+    Text text = Text(
+      "Welcome",
+      style: TextStyle(fontSize:30),
+    );
+
+    Center center = Center(child: text);
+
+    Scaffold scaffold = Scaffold(body: center);
+
+    return scaffold;
+  }
+}

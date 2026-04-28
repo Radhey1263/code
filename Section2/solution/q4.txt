@@ -1,0 +1,107 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp>
+{
+
+  TextEditingController tec1 = TextEditingController();
+  TextEditingController tec2 = TextEditingController();
+
+  List<int> numbers = [];
+
+  @override
+  Widget build(BuildContext context)
+  {
+
+    TextField tf1 = TextField(
+      controller: tec1,
+      decoration: InputDecoration(
+          labelText: "Start Number",
+          border: OutlineInputBorder()
+      ),
+      keyboardType: TextInputType.number,
+    );
+
+    TextField tf2 = TextField(
+      controller: tec2,
+      decoration: InputDecoration(
+          labelText: "End Number",
+          border: OutlineInputBorder()
+      ),
+      keyboardType: TextInputType.number,
+    );
+
+    SizedBox sizedBox = SizedBox(height:20);
+
+    ElevatedButton btn = ElevatedButton(
+        onPressed: (){
+
+          int start = int.parse(tec1.text);
+          int end = int.parse(tec2.text);
+
+          setState(() {
+            numbers.clear();
+
+            for(int i=start; i<=end; i++)
+            {
+              numbers.add(i);
+            }
+
+          });
+
+        },
+        child: Text("Show Range")
+    );
+
+    ListView listView = ListView.builder(
+        itemCount: numbers.length,
+        itemBuilder: (context,index){
+
+          ListTile listTile = ListTile(
+            title: Text("${numbers[index]}"),
+          );
+
+          return listTile;
+        }
+    );
+
+    Expanded expanded = Expanded(child: listView);
+
+    Column column = Column(
+      children: [tf1, sizedBox, tf2, sizedBox, btn, expanded],
+    );
+
+    Container container = Container(
+      alignment: Alignment.center,
+      child: column,
+    );
+
+    AppBar appBar = AppBar(
+      title: Text("Range List"),
+      backgroundColor: Colors.lightBlue,
+    );
+
+    Scaffold scaffold = Scaffold(
+      appBar: appBar,
+      body: container,
+    );
+
+    MaterialApp materialApp = MaterialApp(
+        home: scaffold,
+        debugShowCheckedModeBanner: false
+    );
+
+    return materialApp;
+
+  }
+}

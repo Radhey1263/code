@@ -1,0 +1,104 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp>
+{
+
+  bool s1=false;
+  bool s2=false;
+  bool s3=false;
+  bool s4=false;
+
+  @override
+  Widget build(BuildContext context)
+  {
+
+    SwitchListTile sw1 = SwitchListTile(
+      title: Text("Bulb 1"),
+      value: s1,
+      onChanged: (value){
+        setState(() { s1=value; });
+      },
+    );
+
+    SwitchListTile sw2 = SwitchListTile(
+      title: Text("Bulb 2"),
+      value: s2,
+      onChanged: (value){
+        setState(() { s2=value; });
+      },
+    );
+
+    SwitchListTile sw3 = SwitchListTile(
+      title: Text("Bulb 3"),
+      value: s3,
+      onChanged: (value){
+        setState(() { s3=value; });
+      },
+    );
+
+    SwitchListTile sw4 = SwitchListTile(
+      title: Text("Bulb 4"),
+      value: s4,
+      onChanged: (value){
+        setState(() { s4=value; });
+      },
+    );
+
+    Container bulb1 = Container(
+      height: 60,
+      width: 60,
+      color: s1 ? Colors.yellow : Colors.grey,
+    );
+
+    Container bulb2 = Container(
+      height: 60,
+      width: 60,
+      color: s2 ? Colors.yellow : Colors.grey,
+    );
+
+    Container bulb3 = Container(
+      height: 60,
+      width: 60,
+      color: s3 ? Colors.yellow : Colors.grey,
+    );
+
+    Container bulb4 = Container(
+      height: 60,
+      width: 60,
+      color: s4 ? Colors.yellow : Colors.grey,
+    );
+
+    Row row = Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [bulb1,bulb2,bulb3,bulb4],
+    );
+
+    Column column = Column(
+      children: [sw1,sw2,sw3,sw4,row],
+    );
+
+    Scaffold scaffold = Scaffold(
+      appBar: AppBar(title: Text("Bulb Switch"), backgroundColor: Colors.lightBlue),
+      body: column,
+    );
+
+    MaterialApp materialApp = MaterialApp(
+        home: scaffold,
+        debugShowCheckedModeBanner: false
+    );
+
+    return materialApp;
+
+  }
+}

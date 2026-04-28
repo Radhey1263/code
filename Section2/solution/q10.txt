@@ -1,0 +1,100 @@
+Main:....
+
+import 'package:flutter/material.dart';
+import 'rowtab.dart';
+import 'columntab.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context)
+  {
+
+    Tab tab1 = Tab(text:"Row Images",icon:Icon(Icons.view_row,size:40,color:Colors.red));
+    Tab tab2 = Tab(text:"Column Images",icon:Icon(Icons.view_column,size:40,color:Colors.black));
+
+    TabBar tabBar = TabBar(tabs:[tab1,tab2]);
+
+    AppBar appBar = AppBar(
+      title: Text("Tabs Demo"),
+      bottom: tabBar,
+      backgroundColor: Colors.grey,
+    );
+
+    TabBarView tabBarView = TabBarView(children:[RowTab(),ColumnTab()]);
+
+    Scaffold scaffold = Scaffold(appBar:appBar,body:tabBarView);
+
+    DefaultTabController defaultTabController =
+    DefaultTabController(length: 2, child: scaffold);
+
+    MaterialApp materialApp =
+    MaterialApp(home:defaultTabController,debugShowCheckedModeBanner:false);
+
+    return materialApp;
+
+  }
+}
+
+
+
+
+rowtab.dart
+
+
+...........
+import 'package:flutter/material.dart';
+
+class RowTab extends StatelessWidget {
+  const RowTab({super.key});
+
+  @override
+  Widget build(BuildContext context)
+  {
+
+    Row row = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image.network("https://via.placeholder.com/100"),
+        Image.network("https://via.placeholder.com/100"),
+        Image.network("https://via.placeholder.com/100"),
+      ],
+    );
+
+    Container container = Container(child: row);
+
+    return container;
+  }
+}
+
+colummtab.dart
+
+/.......
+import 'package:flutter/material.dart';
+
+class ColumnTab extends StatelessWidget {
+  const ColumnTab({super.key});
+
+  @override
+  Widget build(BuildContext context)
+  {
+
+    Column column = Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image.network("https://via.placeholder.com/100"),
+        Image.network("https://via.placeholder.com/100"),
+        Image.network("https://via.placeholder.com/100"),
+      ],
+    );
+
+    Container container = Container(child: column);
+
+    return container;
+  }
+}

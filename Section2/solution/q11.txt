@@ -1,0 +1,143 @@
+Main.dart....
+import 'package:flutter/material.dart';
+import 'welcome.dart';
+import 'error.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context)
+  {
+
+    return MaterialApp(
+      home: Login(),
+      debugShowCheckedModeBanner: false,
+    );
+
+  }
+}
+
+class Login extends StatefulWidget {
+  const Login({super.key});
+
+  @override
+  State<Login> createState() => _LoginState();
+}
+
+class _LoginState extends State<Login>
+{
+
+  TextEditingController user = TextEditingController();
+  TextEditingController pass = TextEditingController();
+
+  @override
+  Widget build(BuildContext context)
+  {
+
+    TextField tf1 = TextField(
+      controller: user,
+      decoration: InputDecoration(labelText:"Username",border:OutlineInputBorder()),
+    );
+
+    TextField tf2 = TextField(
+      controller: pass,
+      decoration: InputDecoration(labelText:"Password",border:OutlineInputBorder()),
+    );
+
+    ElevatedButton login = ElevatedButton(
+        onPressed: (){
+
+          if(user.text=="admin" && pass.text=="admin")
+          {
+            Navigator.push(context,
+                MaterialPageRoute(builder:(context)=>Welcome()));
+          }
+          else
+          {
+            Navigator.push(context,
+                MaterialPageRoute(builder:(context)=>ErrorScreen()));
+          }
+
+        },
+        child: Text("Login")
+    );
+
+    Column column = Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [tf1,tf2,login],
+    );
+
+    Container container = Container(
+      alignment: Alignment.center,
+      child: column,
+    );
+
+    Scaffold scaffold = Scaffold(
+      appBar: AppBar(title:Text("Login"),backgroundColor:Colors.lightBlue),
+      body: container,
+    );
+
+    return scaffold;
+
+  }
+}
+
+
+
+welcome.dart
+import 'package:flutter/material.dart';
+
+class Welcome extends StatelessWidget {
+  const Welcome({super.key});
+
+  @override
+  Widget build(BuildContext context)
+  {
+
+    Text text = Text(
+      "Welcome User",
+      style: TextStyle(fontSize:30),
+    );
+
+    Center center = Center(child:text);
+
+    Scaffold scaffold = Scaffold(body:center);
+
+    return scaffold;
+  }
+}
+
+
+
+
+error.dart
+import 'package:flutter/material.dart';
+
+class ErrorScreen extends StatelessWidget {
+  const ErrorScreen({super.key});
+
+  @override
+  Widget build(BuildContext context)
+  {
+
+    Text text = Text(
+      "Invalid Login",
+      style: TextStyle(fontSize:30,color:Colors.red),
+    );
+
+    Center center = Center(child:text);
+
+    Scaffold scaffold = Scaffold(body:center);
+
+    return scaffold;
+  }
+}
+
+
+
+

@@ -1,0 +1,215 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp>
+{
+
+  DateTime selectedDate = DateTime.now();
+
+  String subject = "Maths";
+
+  bool s1=false;
+  bool s2=false;
+  bool s3=false;
+  bool s4=false;
+  bool s5=false;
+
+  TextEditingController presentController = TextEditingController();
+  TextEditingController absentController = TextEditingController();
+
+  int presentCount=0;
+  int absentCount=0;
+
+  @override
+  Widget build(BuildContext context)
+  {
+
+    IconButton dateBtn = IconButton(
+        onPressed: (){ selectDate(); },
+        icon: Icon(Icons.calendar_month)
+    );
+
+    DropdownButton dropdown = DropdownButton(
+        value: subject,
+        items: [
+          DropdownMenuItem(value:"Maths", child: Text("Maths")),
+          DropdownMenuItem(value:"Science", child: Text("Science")),
+        ],
+        onChanged: (value){
+          setState(() {
+            subject = value.toString();
+          });
+        }
+    );
+
+    CheckboxListTile c1 = CheckboxListTile(
+      title: Text(subject=="Maths" ? "Vikas" : "Harsh"),
+      value: s1,
+      onChanged: (value){ setState(() { s1=value!; }); },
+    );
+
+    CheckboxListTile c2 = CheckboxListTile(
+      title: Text(subject=="Maths" ? "Rohan" : "Ved"),
+      value: s2,
+      onChanged: (value){ setState(() { s2=value!; }); },
+    );
+
+    CheckboxListTile c3 = CheckboxListTile(
+      title: Text(subject=="Maths" ? "Tanisha" : "Vihan"),
+      value: s3,
+      onChanged: (value){ setState(() { s3=value!; }); },
+    );
+
+    CheckboxListTile c4 = CheckboxListTile(
+      title: Text(subject=="Maths" ? "Rucha" : "Chinar"),
+      value: s4,
+      onChanged: (value){ setState(() { s4=value!; }); },
+    );
+
+    CheckboxListTile c5 = CheckboxListTile(
+      title: Text(subject=="Maths" ? "Pavan" : "Dev"),
+      value: s5,
+      onChanged: (value){ setState(() { s5=value!; }); },
+    );
+
+    ElevatedButton submit = ElevatedButton(
+        onPressed: (){
+
+          String present="";
+          String absent="";
+
+          presentCount=0;
+          absentCount=0;
+
+          List names = [
+            subject=="Maths" ? "Vikas" : "Harsh",
+            subject=="Maths" ? "Rohan" : "Ved",
+            subject=="Maths" ? "Tanisha" : "Vihan",
+            subject=="Maths" ? "Rucha" : "Chinar",
+            subject=="Maths" ? "Pavan" : "Dev",
+          ];
+
+          List values = [s1,s2,s3,s4,s5];
+
+          for(int i=0;i<5;i++)
+          {
+            if(values[i])
+            {
+              present += names[i]+"\n";
+              presentCount++;
+            }
+            else
+            {
+              absent += names[i]+"\n";
+              absentCount++;
+            }
+          }
+
+          String date = "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}";
+
+          presentController.text =
+          "Date: $date\nSubject: $subject\nPresent Students:\n$present";
+
+          absentController.text =
+          "Date: $date\nSubject: $subject\nAbsent Students:\n$absent";
+
+          setState(() {});
+
+        },
+        child: Text("Submit")
+    );
+
+    ElevatedButton reset = ElevatedButton(
+        onPressed: (){
+          setState(() {
+            s1=s2=s3=s4=s5=false;
+            presentController.clear();
+            absentController.clear();
+            presentCount=0;
+            absentCount=0;
+          });
+        },
+        child: Text("Reset")
+    );
+
+    Row btnRow = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [submit, SizedBox(width:20), reset],
+    );
+
+    Badge badge1 = Badge.count(count: presentCount, child: Icon(Icons.people));
+    Badge badge2 = Badge.count(count: absentCount, child: Icon(Icons.person_off));
+
+    Row badgeRow = Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [badge1, badge2],
+    );
+
+    TextField presentBox = TextField(
+      controller: presentController,
+      maxLines: 6,
+      decoration: InputDecoration(border: OutlineInputBorder()),
+    );
+
+    TextField absentBox = TextField(
+      controller: absentController,
+      maxLines: 6,
+      decoration: InputDecoration(border: OutlineInputBorder()),
+    );
+
+    Row outputRow = Row(
+      children: [
+        Expanded(child: presentBox),
+        Expanded(child: absentBox),
+      ],
+    );
+
+    Column column = Column(
+      children: [
+        dateBtn,
+        dropdown,
+        c1,c2,c3,c4,c5,
+        btnRow,
+        badgeRow,
+        outputRow
+      ],
+    );
+
+    Scaffold scaffold = Scaffold(
+      appBar: AppBar(title: Text("Attendance"), backgroundColor: Colors.lightBlue),
+      body: column,
+    );
+
+    MaterialApp materialApp = MaterialApp(
+        home: scaffold,
+        debugShowCheckedModeBanner: false
+    );
+
+    return materialApp;
+
+  }
+
+  Future selectDate() async {
+    DateTime? pickedDate = await showDatePicker(
+        context: context,
+        firstDate: DateTime.now(),
+        lastDate: DateTime.now().add(Duration(days:1))
+    );
+
+    if(pickedDate != null){
+      setState(() {
+        selectedDate = pickedDate;
+      });
+    }
+  }
+}

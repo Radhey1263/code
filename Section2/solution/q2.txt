@@ -1,0 +1,113 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp>
+{
+
+  double a=1;
+  double b=1;
+  double c=1;
+  double max=0;
+
+  @override
+  Widget build(BuildContext context)
+  {
+
+    SliderThemeData sliderThemeData = SliderThemeData(
+        showValueIndicator: ShowValueIndicator.alwaysVisible
+    );
+
+    Slider s1 = Slider(
+        min:1,max:5,divisions:4,value:a,
+        onChanged:(value){
+          setState(() {
+            a=value;
+          });
+        }
+    );
+
+    SliderTheme slider1 = SliderTheme(data: sliderThemeData, child: s1);
+
+    Slider s2 = Slider(
+        min:1,max:5,divisions:4,value:b,
+        onChanged:(value){
+          setState(() {
+            b=value;
+          });
+        }
+    );
+
+    SliderTheme slider2 = SliderTheme(data: sliderThemeData, child: s2);
+
+    Slider s3 = Slider(
+        min:1,max:5,divisions:4,value:c,
+        onChanged:(value){
+          setState(() {
+            c=value;
+          });
+        }
+    );
+
+    SliderTheme slider3 = SliderTheme(data: sliderThemeData, child: s3);
+
+    ElevatedButton btn = ElevatedButton(
+        onPressed: (){
+          setState(() {
+
+            max = a;
+
+            if(b>max)
+              max=b;
+
+            if(c>max)
+              max=c;
+
+          });
+        },
+        child: Text("Show Max")
+    );
+
+    Text t1 = Text("a = $a");
+    Text t2 = Text("b = $b");
+    Text t3 = Text("c = $c");
+    Text t4 = Text("Max = $max");
+
+    Column column = Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [slider1,t1,slider2,t2,slider3,t3,btn,t4],
+    );
+
+    Container container = Container(
+      alignment: Alignment.center,
+      child: column,
+    );
+
+    AppBar appBar = AppBar(
+      title: Text("Max Finder"),
+      backgroundColor: Colors.lightBlue,
+    );
+
+    Scaffold scaffold = Scaffold(
+      appBar: appBar,
+      body: container,
+    );
+
+    MaterialApp materialApp = MaterialApp(
+        home: scaffold,
+        debugShowCheckedModeBanner: false
+    );
+
+    return materialApp;
+
+  }
+}
