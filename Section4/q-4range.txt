@@ -1,0 +1,65 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+
+  TextEditingController start = TextEditingController();
+  TextEditingController End  = TextEditingController();
+
+  List<int> numbers = [];
+
+
+  @override
+  Widget build(BuildContext context) {
+
+    TextField start1 = TextField(controller: start,keyboardType: TextInputType.number ,decoration: InputDecoration(labelText: "StartNumber"),);
+
+    TextField End1 = TextField(controller: End, keyboardType: TextInputType.number, decoration: InputDecoration(labelText: "End Number"),);
+
+    ElevatedButton button = ElevatedButton(onPressed: (){
+      int s = int.parse(start.text);
+      int e = int.parse(End.text);
+
+      List<int> temp = [];
+
+      for(int i=s; i<=e; i++)
+      {
+        temp.add(i);
+      }
+      setState(() {
+        numbers = temp;
+      });
+
+
+    }, child: Text("Show Range"));
+
+
+    ListView list =ListView.builder(shrinkWrap: true,itemCount: numbers.length,itemBuilder:(context, index)
+    {
+      return ListTile(
+        title: Text(numbers[index].toString()),
+      );
+    });
+
+    SizedBox sizedBox = SizedBox(height: 20,);
+
+    Column column = Column(children: [start1 ,sizedBox , End1 , sizedBox , button , sizedBox ,list],);
+
+    Scaffold scaffold =Scaffold(appBar: AppBar(title: Text("Rang app"),) , body: Center(child: column,),);
+
+    return MaterialApp(home: scaffold, debugShowCheckedModeBanner: false,);
+
+
+  }
+}

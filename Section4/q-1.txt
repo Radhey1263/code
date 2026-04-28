@@ -1,0 +1,89 @@
+import 'dart:math';
+
+import 'package:flutter/material.dart';
+
+
+void main() {
+  runApp(MaterialApp(home: MyApp(),));
+}
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+TextEditingController idcontroller = TextEditingController();
+String date = "Select date";
+
+bool flutter = false;
+bool java = false;
+bool php = false;
+
+String res = "";
+  @override
+  Widget build(BuildContext context) {
+
+TextField id = TextField(controller: idcontroller, decoration: InputDecoration(labelText: "Enter Student Id", border: OutlineInputBorder(),));
+
+Row daterow = Row(
+  mainAxisAlignment: MainAxisAlignment.center,
+  children: [Text("Dob"),
+IconButton(onPressed: ()async{
+  DateTime? picked = await showDatePicker(context: context,initialDate: DateTime.now(), firstDate: DateTime(2000), lastDate: DateTime(2100));
+
+  if(picked != null)
+    {
+setState(() {
+date ="${picked.day}/${picked.month}/${picked.year}";
+});
+    }
+}, icon: Icon(Icons.calendar_today)),
+  ],
+);
+
+CheckboxListTile c1 = CheckboxListTile(value: flutter, title: Text("Flutter"), onChanged: (val)
+{
+  setState(() {
+    flutter = val!;
+  });
+});
+CheckboxListTile c2 = CheckboxListTile(value: java, title: Text("java"), onChanged: (val)
+{
+  setState(() {
+    java = val!;
+  });
+});
+CheckboxListTile c3 = CheckboxListTile(value: php, title: Text("php"), onChanged: (val)
+{
+  setState(() {
+    php = val!;
+  });
+});
+
+ElevatedButton submit = ElevatedButton(onPressed: (){
+List<String> skils = [];
+
+if(flutter) skils.add("flutter");
+if(java) skils.add("java");
+if(php) skils.add("php");
+
+setState(() {
+res =
+"Student id ${idcontroller.text}\n"
+    "Date of Birth: $date\n"
+    "Skils: ${skils.join(",")}";
+
+});
+}, child: Text("submit"));
+
+Text t = Text(res);
+    SizedBox sizedBox =SizedBox(height: 10,);
+
+    Column c = Column(children: [id , sizedBox, daterow , sizedBox , c1 , c2, c3 , sizedBox , submit , sizedBox , t ],);
+    Scaffold scaffold= Scaffold(appBar: AppBar(title: Text("register"),backgroundColor: Colors.teal,),body: Center(child: c,),);
+    return scaffold;
+  }
+}

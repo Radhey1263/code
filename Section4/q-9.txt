@@ -1,0 +1,104 @@
+
+
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MaterialApp(home: MyApp()));
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp>
+{
+
+  bool all =false;
+  bool pizza = false;
+  bool frise = false;
+  bool drink = false;
+
+  String items = "";
+  int total =0;
+
+  void updateDate()
+   {
+    List<String> list =[];
+    total =0;
+
+    if(pizza) {
+      list.add("Pizza");
+      total +=  250;
+    }
+    if(frise)
+    {
+      list.add("Frise");
+      total +=80;
+    }
+    if(drink)
+    {
+      list.add("coldDrink");
+      total +=50;
+    }
+    items = list.join(",");
+
+  }
+  @override
+  Widget build(BuildContext context) {
+
+
+
+CheckboxListTile c1 = CheckboxListTile(title:Text("select all"),value: all, onChanged:(val){
+  setState(() {
+all = val!;
+pizza = all;
+frise = all;
+drink =all;
+updateDate();
+  });
+});
+
+
+//pizza
+
+    CheckboxListTile c2 = CheckboxListTile(title: Text("Piza(250)"),value: pizza, onChanged:(val){
+      setState(() {
+        pizza = val!;
+        all =pizza && drink && frise;
+        updateDate();
+      });
+    });
+
+    // fries
+
+    CheckboxListTile c3 = CheckboxListTile(title: Text("Frise(80)"),value: frise, onChanged:(val){
+      setState(() {
+        frise = val!;
+        all =pizza && drink && frise;
+        updateDate();
+      });
+    });
+
+    // drink
+
+    CheckboxListTile c4 = CheckboxListTile(title: Text("Drink(50)"),value: drink, onChanged:(val){
+      setState(() {
+        drink = val!;
+        all =pizza && drink && frise;
+        updateDate();
+      });
+    });
+    
+    Text t1 = Text("selected : $items");
+    Text t2 = Text ("Total rs : $total");
+
+
+    SizedBox s = SizedBox(height: 20,);
+    Column c = Column( children: [c1,s,c2,s,c3,s,c4,s,t1,s,t2],);
+    Scaffold scaffold = Scaffold(appBar: AppBar(title: Text("Food"),backgroundColor: Colors.tealAccent,),body: SingleChildScrollView(child: Center(child: c,),),);
+    return MaterialApp(home: scaffold,);
+  }
+}

@@ -1,0 +1,59 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+String State = "gujarat";
+String City ="";
+
+Map Data = {
+  "gujarat" :["Ahmedabad" , "Surat", "Rajkot"],
+  "Maharashtra": ["mumbai" , "pune" ,"nagpur"],
+  "Rajasthan": ["jaipur" , "udaipur" , "jodhpur"]
+};
+
+
+  @override
+  Widget build(BuildContext context) {
+
+    DropdownButton drop = DropdownButton(value: State,items: Data.keys.map((e)=>
+     DropdownMenuItem(value: e,child:Text(e))).toList(), onChanged: (val){
+        setState(() {
+            State = val;
+            City = "";
+        });
+    });
+
+  Column radio = Column(
+    children: Data[State].map<Widget>((c)
+    {
+      return RadioListTile(value: c , title: Text(c), groupValue: City, onChanged: (val){
+        setState(() {
+          City = val!;
+        });
+      },
+      );
+    }).toList(),
+  );
+
+Text result =Text("City : $City");
+
+SizedBox space = SizedBox(height: 20,);
+
+
+    Column column = Column(children: [drop , space ,radio , space ,result],);
+
+    Scaffold scaffold =Scaffold(appBar: AppBar(title: Text("city-state") , backgroundColor: Colors.lightBlue,), body: Center(child: column,),);
+
+    return MaterialApp(home: scaffold, debugShowCheckedModeBanner: false,);
+  }
+}

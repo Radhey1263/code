@@ -1,0 +1,126 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MaterialApp(home: MyApp()));
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  List<String> seats = [
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "A5",
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "B5",
+    "C1",
+    "C2",
+    "C3",
+    "C4",
+    "C5",
+  ];
+
+  List<String> selected = [];
+  List<String> booked = [];
+
+  int total = 0;
+
+  int price(String s) {
+    if (s.startsWith("A")) return 800;
+    if (s.startsWith("B")) return 700;
+    return 500;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // grid
+
+    GridView grid = GridView.count(
+      crossAxisCount: 5,
+      shrinkWrap: true,
+      children: seats.map((s) {
+        Color color = Colors.grey;
+
+        if (booked.contains(s)) color = Colors.red;
+        if (selected.contains(s)) color = Colors.yellow;
+
+        return GestureDetector(
+          onTap: () {
+            setState(() {
+              if (selected.contains(s)) {
+                selected.remove(s);
+              } else {
+                selected.add(s);
+              }
+            });
+          },
+          child: Container(
+            margin: EdgeInsets.all(5),
+            color: color,
+            child: Center(child: Text(s)),
+          ),
+        );
+      }).toList(),
+    );
+
+    // book
+
+    ElevatedButton book = ElevatedButton(
+      onPressed: () {
+        setState(() {
+          for (var s in selected) {
+            if (!booked.contains(s)) {
+              booked.add(s);
+              total += price(s);
+            }
+          }
+          selected.clear();
+        });
+      },
+      child: Text("Book"),
+    );
+
+    ElevatedButton reset = ElevatedButton(
+      onPressed: () {
+        setState(() {
+          for (var s in selected) {
+            if (!booked.contains(s)) {
+              booked.remove(s);
+              total -= price(s);
+            }
+          }
+          selected.clear();
+        });
+      },
+      child: Text("Reset"),
+    );
+
+Text t1 = Text("Booked  ${booked.length}" );
+Text t2 = Text("Avilable ${15 -booked.length}");
+Text t3 = Text("Enring $total");
+
+
+    SizedBox s = SizedBox(height: 20);
+    Column c = Column(children: [grid , s, Row(children: [book , reset],), s, t1 ,t2 ,t3]);
+    Scaffold scaffold = Scaffold(
+      appBar: AppBar(
+        title: Text("Book Ticket"),
+        backgroundColor: Colors.purpleAccent,
+      ),
+      body: SingleChildScrollView(child: Center(child: c)),
+    );
+    return MaterialApp(home: scaffold);
+  }
+}

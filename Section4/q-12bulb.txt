@@ -1,0 +1,62 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  bool hall = false;
+  bool kitchen = false;
+  bool bedroom = false;
+  bool lobby = false;
+
+  @override
+  Widget build(BuildContext context) {
+
+   CheckboxListTile hallbox = CheckboxListTile(title: Text("Hall"), value:hall, onChanged: (val){
+     setState(() {
+      hall = val!;
+     });
+   });
+
+   CheckboxListTile kitchenbox = CheckboxListTile(title: Text("kitchen"),value: kitchen, onChanged: (val){
+     setState(() {
+       kitchen = val!;
+     });
+   });
+
+   CheckboxListTile bedroombox = CheckboxListTile(title: Text("bedroom"),value: bedroom, onChanged:(val){
+     setState(() {
+       bedroom = val!;
+     });
+   });
+
+   CheckboxListTile lobbybox = CheckboxListTile(title: Text("lobby"),value:lobby , onChanged: (val){
+     setState(() {
+       lobby = val!;
+     });
+   });
+
+  Row bulb = Row (mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  children: [
+    Icon(Icons.lightbulb, color: hall ? Colors.yellowAccent : Colors.grey, size: 40,),
+    Icon(Icons.lightbulb, color: kitchen ? Colors.yellowAccent: Colors.grey, size: 40,),
+    Icon(Icons.lightbulb,color: bedroom ? Colors.yellowAccent: Colors.grey,size: 40,),
+    Icon(Icons.lightbulb, color: lobby ? Colors.yellowAccent: Colors.grey, size: 40,),
+  ],);
+
+  SizedBox space =SizedBox(height: 20,);
+
+    Column column = Column(children: [hallbox,space , kitchenbox , space , bedroombox, space , lobbybox , space , bulb],);
+    Scaffold scaffold = Scaffold(appBar: AppBar(title: Text("Buld Application"),backgroundColor: Colors.blueAccent,),body: Center(child: column,),);
+    return MaterialApp(home: scaffold,);
+  }
+}

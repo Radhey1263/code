@@ -1,0 +1,186 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MaterialApp(home: MyApp())); // ✅ CHANGE 1
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  TextEditingController datecontroller = TextEditingController();
+
+  String subject = "maths";
+
+  List<String> maths = ["sneha","hetvi","jeel","riya","yug"];
+  List<String> science = ["mahi","princy","nenshi","khushi","janavi"];
+
+  List<bool> checked = [false,false,false,false,false];
+
+  String present = "";
+  String absent = "";
+
+  int prsentcount = 0;
+  int absentcount = 0;
+
+  List<String> Getstudent() {
+    return subject == "maths" ? maths : science;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    List<String> student = Getstudent();
+
+    // 🔹 Date Picker Button
+    ElevatedButton date = ElevatedButton(
+      onPressed: () async {
+
+        DateTime now = DateTime.now();
+
+        DateTime? picked = await showDatePicker(
+          context: context,
+          initialDate: now,
+          firstDate: now,
+          lastDate: now.add(Duration(days: 1)),
+        );
+
+        if (picked != null) {
+          setState(() {
+            datecontroller.text =
+            "${picked.day}/${picked.month}/${picked.year}";
+          });
+        }
+
+      },
+      child: Text(
+        datecontroller.text.isEmpty
+            ? "Select Date"
+            : datecontroller.text,
+      ),
+    );
+
+    // 🔹 Dropdown
+    DropdownButton subjectdrop = DropdownButton(
+      value: subject,
+      items: ['maths','science'].map((e) {
+        return DropdownMenuItem(value: e, child: Text(e));
+      }).toList(),
+      onChanged: (val) {
+        setState(() {
+          subject = val!;
+          checked = List.filled(5, false);
+        });
+      },
+    );
+
+    // 🔹 Checkbox List
+    List<Widget> list = List.generate(student.length, (i) {
+      return CheckboxListTile(
+        title: Text(student[i]),
+        value: checked[i],
+        onChanged: (val) {
+          setState(() {
+            checked[i] = val!;
+          });
+        },
+      );
+    });
+
+    // 🔹 Submit Button
+    ElevatedButton submit = ElevatedButton(
+      onPressed: () {
+
+        DateTime now = DateTime.now();
+        String today = "${now.day}/${now.month}/${now.year}";
+
+        if (datecontroller.text != today) {
+          setState(() {
+            present = "Invalid Date";
+            absent = "";
+          });
+          return;
+        }
+
+        String p = "";
+        String a = "";
+        int pc = 0;
+        int ac = 0;
+
+        for (int i = 0; i < student.length; i++) {
+          if (checked[i]) {
+            p += student[i] + "\n";
+            pc++;
+          } else {
+            a += student[i] + "\n";
+            ac++;
+          }
+        }
+
+        setState(() {
+          present = p;
+          absent = a;
+          prsentcount = pc;
+          absentcount = ac;
+        });
+      },
+      child: Text("Submit"),
+    );
+
+    // 🔹 Reset Button
+    ElevatedButton reset = ElevatedButton(
+      onPressed: () {
+        setState(() {
+          checked = List.filled(5, false);
+          present = "";
+          absent = "";
+          absentcount = 0;
+          prsentcount = 0;
+          datecontroller.clear();
+        });
+      },
+      child: Text("Reset"),
+    );
+
+    // 🔹 Output
+    Text presentbox = Text(
+      "Present:\n$present\nCount: $prsentcount",
+    );
+
+    Text absentbox = Text(
+      "Absent:\n$absent\nCount: $absentcount",
+    );
+
+    SizedBox space = SizedBox(height: 20);
+
+    Column c = Column(
+      children: [
+        date,
+        space,
+        subjectdrop,
+        space,
+        ...list,
+        space,
+        submit,
+        space,
+        reset,
+        space,
+        presentbox,
+        space,
+        absentbox,
+      ],
+    );
+
+    Scaffold scaffold = Scaffold(
+      appBar: AppBar(title: Text("Attendance")),
+      body: SingleChildScrollView(child: Center(child: c)),
+    );
+
+    return scaffold; // ✅ CHANGE 2
+  }
+}

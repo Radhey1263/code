@@ -1,0 +1,134 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+// remain
+
+int bRemain = 30 , lRemain =40, dRemain= 30;
+
+int bPrice =40, lPrice = 80 , dPrice=60;
+
+int bQty =1 , lQty =1 , dQty =1;
+int bSold =0 ,lSold =0 , dSold =0;
+
+int total =0;
+
+List<int> getList(int remain)
+{
+  List<int> list =[];
+  for(int i =1 ; i<=5  && i <= remain ; i++)
+    {
+      list.add(i);
+    }
+  return list;
+}
+
+
+  @override
+  Widget build(BuildContext context) {
+
+Row Breackfast = Row(
+mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  children: [
+    Text("BreackFast"),
+
+    DropdownButton(value: bQty,items:getList(bRemain).map((e){
+      return DropdownMenuItem(value: e,child: Text("$e"));
+    }).toList(), onChanged: (val){
+      setState(() {
+          bQty = val!;
+      });
+    }),
+
+Text("${bQty * bPrice}"),
+
+    ElevatedButton(onPressed: bRemain  == 0 ? null : (){
+      setState(() {
+        bSold +=bQty;
+        bRemain -= bQty;
+        total += bQty * bPrice;
+      });
+    }, child: Text("Order")),
+
+      Text("sold $bSold"),
+      Text("remain $bRemain"),
+  ],
+);
+
+
+// lunch
+
+Row lunch  = Row(mainAxisAlignment:  MainAxisAlignment.spaceEvenly, children: [
+
+  Text("Lunch"),
+
+ DropdownButton(value:lQty,items: getList(lRemain).map((e) {
+   return DropdownMenuItem(value: e,child: Text("$e"));
+ }).toList(), onChanged:(val){
+   setState(() {
+     lQty = val!;
+   });
+
+ }),
+  Text("${lQty * lPrice}"),
+
+  ElevatedButton(onPressed: lRemain  == 0 ? null : (){
+    setState(() {
+lSold += lQty;
+lRemain -=lQty;
+total += lPrice * lQty;
+    });
+  }, child: Text("Order")),
+
+  Text("sold : $lSold"),
+  Text("Remain: $lRemain"),
+],);
+
+Row Dinner = Row(mainAxisAlignment:  MainAxisAlignment.spaceEvenly,children: [
+
+  Text("Dinner"),
+
+  DropdownButton(value: dQty,items:getList(dRemain).map((e){
+    return DropdownMenuItem(value: e,child: Text("$e"));
+  }).toList(), onChanged:(val){
+    setState(() {
+      dQty = val!;
+    });
+  }),
+
+  Text("${dQty * dPrice}"),
+
+ElevatedButton(onPressed: dRemain == 0 ? null : (){
+  setState(() {
+    dSold += dQty;
+    dRemain -= dQty;
+    total += dPrice * dQty;
+  });
+    }, child: Text("Order")),
+
+  Text("sold : $dSold"),
+Text("Remain: $dRemain"),
+],);
+
+// target
+
+    int target =(30*40) + (40 * 80) + (30 * 60);
+
+
+    SizedBox s = SizedBox(height: 10,);
+    Column c = Column(children: [Breackfast , s, lunch , s , Dinner , s  , Text("Target $target"), Text("achived $total"), Text("remain ${target - total}")],);
+    Scaffold scaffold = Scaffold(appBar: AppBar(title: Text("food shop"),backgroundColor: Colors.blue,),body: Center(child: c,),);
+    return MaterialApp(home: scaffold,);
+  }
+}

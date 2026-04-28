@@ -1,0 +1,97 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  TextEditingController firstcontroller = TextEditingController();
+  TextEditingController lastcontroller = TextEditingController();
+
+  String Gender = "male";
+
+  bool English = true;
+  bool Hindi = false;
+  bool Gujarati = false;
+
+  String res = "";
+
+  @override
+  Widget build(BuildContext context) {
+
+    TextField first = TextField(controller: firstcontroller, decoration: InputDecoration(labelText: "Enter the First name"),);
+    TextField last = TextField(controller: lastcontroller , decoration: InputDecoration(labelText: "Enter the last name"),);
+
+    Column gender = Column(children: [
+      RadioListTile(value: "male" , title: Text("Male"), groupValue: Gender, onChanged: (val){
+        setState(() {
+          Gender = val.toString();
+        });
+      },),
+
+      RadioListTile(value: "female" , title: Text("female"), groupValue: Gender, onChanged: (val){
+        setState(() {
+          Gender =val.toString();
+        });
+      },),
+
+      RadioListTile(value: "other" , title: Text("other"), groupValue: Gender, onChanged: (val){
+        setState(() {
+          Gender = val.toString();
+        });
+      },)
+    ],);
+
+
+    Column langbox = Column(children: [
+      CheckboxListTile(value: English, title: Text("English"), onChanged: (val){
+        setState(() {
+          English = val!;
+        });
+      }),
+
+      CheckboxListTile(value: Hindi, title: Text("Hindi"),onChanged: (val){
+        setState(() {
+          Hindi = val!;
+
+        });
+      }),
+
+      CheckboxListTile(value: Gujarati,title: Text("Gujarati"), onChanged:(val){
+        setState(() {
+          Gujarati = val!;
+        });
+      })
+
+    ],);
+
+    ElevatedButton button = ElevatedButton(onPressed: (){
+      String lang = "";
+      if(English) lang += "English";
+      if(Hindi) lang += " Hindi";
+      if(Gujarati) lang += " Gujarati";
+
+      setState(() {
+        res  = "name: ${firstcontroller.text} ${lastcontroller.text}\n"
+            "Gender : $Gender\n"
+          "language: $lang";
+      });
+    }, child:Text("Submit"));
+
+    Text t = Text(res);
+
+
+    SizedBox s = SizedBox(height: 10,);
+    Column column = Column(children: [first , s , last , s, gender , s , langbox , s , button , s , t],);
+    Scaffold scaffold = Scaffold(appBar: AppBar(title: Text("Register"),backgroundColor: Colors.teal,),body: SingleChildScrollView(child: Center(child: column,),),);
+    return MaterialApp(home: scaffold,);
+  }
+}

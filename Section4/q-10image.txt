@@ -1,0 +1,149 @@
+STEP 1: Image Folder Setup
+
+👉 Tamara project ma folder banao:
+
+assets/images/
+
+👉 3 images muki do:
+
+assets/images/img1.jpg
+assets/images/img2.jpg
+assets/images/img3.jpg
+
+👉 pubspec.yaml ma add karo:
+
+flutter:
+  assets:
+     - assets/images/
+
+
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
+
+  @override
+  Widget build(BuildContext context) {
+
+    TabController t = TabController(length: 2, vsync: this);
+
+    // 🔹 Tab 1 (Row)
+    Container tab1 = Container(
+      color: Colors.blue[100],
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Image.asset("assets/images/img1.jpg", width: 80),
+          Image.asset("assets/images/img2.jpg", width: 80),
+          Image.asset("assets/images/img3.jpg", width: 80),
+        ],
+      ),
+    );
+
+    // 🔹 Tab 2 (Column)
+    Container tab2 = Container(
+      color: Colors.green[100],
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Image.asset("assets/images/img1.jpg", height: 80),
+          Image.asset("assets/images/img2.jpg", height: 80),
+          Image.asset("assets/images/img3.jpg", height: 80),
+        ],
+      ),
+    );
+
+    // 🔹 TabBar
+    TabBar bar = TabBar(
+      controller: t,
+      tabs: [
+        Tab(text: "Row"),
+        Tab(text: "Column"),
+      ],
+    );
+
+    // 🔹 TabView
+    TabBarView view = TabBarView(
+      controller: t,
+      children: [tab1, tab2],
+    );
+
+    // 🔹 Scaffold
+    Scaffold scaffold = Scaffold(
+      appBar: AppBar(
+        title: Text("Tab App"),
+        bottom: bar,
+      ),
+      body: view,
+    );
+
+    return MaterialApp(
+      home: scaffold,
+      debugShowCheckedModeBanner: false,
+    );
+  }
+}
+
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MaterialApp(home: MyApp(),));
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  Widget build(BuildContext context) {
+
+  
+    TabBar tabBar = TabBar(tabs: [
+      Tab(text: "Row",),
+      Tab(text:"Column")
+    ]);
+
+    Row rowImage = Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+    children: [
+      Image.asset("assets/img1.jpg",width: 80,),
+      Image.asset("assets/img2.jpg",width: 80,),
+      Image.asset("assets/img3.jpg",width: 80,),
+
+    ],
+    );
+
+    Column columnImage = Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    children: [
+      Image.asset("assets/img1.jpg",width: 80,),
+      Image.asset("assets/img2.jpg",width: 80,),
+      Image.asset("assets/img3.jpg",width: 80,),
+    ],);
+
+    TabBarView  tabview = TabBarView(children: [Container(
+      color: Colors.blue, child: rowImage,
+    ),
+    Container(
+      color: Colors.orange, child: columnImage,
+    )
+    ]);
+    
+    
+
+
+    Scaffold scaffold = Scaffold(appBar: AppBar(title: Text("tab bar"),backgroundColor: Colors.greenAccent,bottom: tabBar,),body: tabview,);
+    return DefaultTabController(length: 2, child: scaffold);
+  }
+}

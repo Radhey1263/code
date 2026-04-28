@@ -1,0 +1,114 @@
+import 'package:flutter/material.dart';
+
+
+void main() {
+  runApp(MaterialApp(home: MyApp()));
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  String date = "Select date";
+  String? slot;
+  String msg = "";
+  List<String> list = [];
+  List<String> slots = ["10-11", "11-12", "12-1", "4-5", "5-6", "6-7"];
+
+  @override
+  Widget build(BuildContext context) {
+    // selected date
+
+    ElevatedButton selectdate = ElevatedButton(
+      onPressed: () async {
+        DateTime now = DateTime.now();
+
+        DateTime? d = await showDatePicker(
+          context: context,
+          initialDate: now,
+          firstDate: now,
+          lastDate: now,
+        );
+
+        if (d != null) {
+          setState(() {
+            date = "${d.day}/${d.month}/ ${d.year}";
+          });
+        }
+      },
+      child: Text("Select date"),
+    );
+
+    // drop down button
+
+    DropdownButton drop = DropdownButton(
+      hint: Text("Slot"),
+      value: slot,
+      items: slots.map((e) {
+        return DropdownMenuItem(value: e, child: Text(e));
+      }).toList(),
+      onChanged: (val) {
+        setState(() {
+          slot = val;
+        });
+      },
+    );
+
+    //book
+
+    ElevatedButton book = ElevatedButton(
+      onPressed: () {
+        String data = "$date - $slot";
+        if (list.contains(data)) {
+          setState(() {
+            msg = "Sloat not available";
+          });
+        } else {
+          setState(() {
+            list.add(data);
+            msg = "";
+          });
+        }
+      },
+      child: Text("Book"),
+    );
+
+    // reset button
+
+    ElevatedButton reset = ElevatedButton(
+      onPressed: () {
+          setState(() {
+            list.clear();
+            msg = "";
+          });
+      },
+      child: Text("reset"),
+    );
+
+    // list view
+
+ListView lv = ListView(
+  shrinkWrap: true,
+  children: list.map((e) => Text(e)).toList(),
+);
+
+Text t = Text("Total: ${list.length}");
+
+
+    SizedBox s = SizedBox(height: 20);
+    Column c = Column(children: [t, s, selectdate, s, drop, s, Row(children: [book , reset],), s , lv ,Text(msg)]);
+
+    Scaffold scaffold = Scaffold(
+      appBar: AppBar(
+        title: Text("Book Appointment"),
+        backgroundColor: Colors.blue,
+      ),
+      body: SingleChildScrollView(child: Center(child: c)),
+    );
+    return scaffold;
+  }
+}

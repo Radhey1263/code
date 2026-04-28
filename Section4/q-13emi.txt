@@ -1,0 +1,69 @@
+import 'dart:async';
+import 'dart:ui_web';
+
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  
+  double amount = 50000, year = 1 ,  rate = 8;
+  double emi = 0;
+  @override
+  Widget build(BuildContext context) {
+    
+    double interset = (amount * rate * year)/100;
+    double total = amount + interset;
+    double month = year * 12;
+    
+    
+    emi = total/month;
+    
+    Column a = Column(
+      children: [
+        Text("amount : ${amount.toInt()}"),
+        Slider(value: amount, min: 50000 , max: 5000000, divisions: 9, onChanged:(val){
+          setState(() {
+            amount = val;
+          });
+        })]);
+      Column b = Column(
+        children: [
+          Text("rate: ${rate.toInt()}"),
+          Slider(value: rate,min: 8, max: 12, divisions: 4, onChanged:(val){
+            setState(() {
+              rate = val;
+            });
+          })
+        ],
+      ) ;
+      
+      Column c = Column(
+        children: [
+          Text("Year ${year.toInt()}"),
+          Slider(value: year,min: 1, max: 3, divisions: 2, onChanged:(val){
+            setState(() {
+              year = val;
+            });
+          })
+        ],
+      );
+      
+      Text output =Text("emi ${emi.toStringAsFixed(2)}");
+
+    
+    
+    SizedBox space = SizedBox(height: 20,);
+    Column column = Column(children: [a , space ,b ,space ,c ,space, output],);
+    Scaffold scaffold= Scaffold(appBar: AppBar(title: Text("calculator"),),body: SingleChildScrollView(child: Center(child: column,),),);
+    return MaterialApp(home: scaffold,);
+  }
+}

@@ -1,0 +1,121 @@
+main
+
+import 'package:flutter/material.dart';
+import 'login.dart';
+import 'welcome.dart';
+import 'errormsg.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+
+    return MaterialApp(home: LoginPage(), debugShowCheckedModeBanner: false,
+    initialRoute: "/login",
+
+    routes: {
+      "/login": (context)=> LoginPage(),
+      "/welcome" :(context)=> welcomepage(),
+      "/errormsg" :(context)=>errorMsg(),
+    },);
+  }
+}
+
+
+/* login
+
+import 'package:flutter/material.dart';
+
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+
+  TextEditingController usernamecontroller = TextEditingController();
+  TextEditingController Passwordcontroller = TextEditingController();
+  @override
+  Widget build(BuildContext context) {
+
+    TextField username = TextField(controller: usernamecontroller, decoration: InputDecoration(labelText: "Username"),);
+
+    TextField password = TextField(controller: Passwordcontroller, decoration: InputDecoration(labelText: "password"),);
+
+    ElevatedButton login = ElevatedButton(onPressed: (){
+      if(usernamecontroller.text == "admin" && Passwordcontroller.text == "admin")
+        {
+          Navigator.pushNamed(context, "/welcome");
+        }
+      else
+        {
+          Navigator.pushNamed(context, "/errormsg");
+        }
+    }, child: Text("Register"));
+
+
+    SizedBox space = SizedBox(height: 20,);
+    Column column =Column(children: [username, space , password , space , login ,],);
+    Scaffold scaffold = Scaffold(appBar: AppBar(title: Text("Login page"),backgroundColor: Colors.blueAccent,),body: Center(child: column,),);
+    return MaterialApp(home: scaffold,);
+
+  }
+}
+
+
+
+/* welcome
+
+import 'package:flutter/material.dart';
+
+class welcomepage extends StatelessWidget {
+  const welcomepage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+
+    Text t = Text("welcome" , style: TextStyle(fontSize: 40),);
+
+    Scaffold scaffold =Scaffold(appBar: AppBar(title: Text("welcome"),),);
+    return scaffold;
+
+  }
+}
+
+
+/*
+import 'package:flutter/material.dart';
+
+class errorMsg extends StatefulWidget {
+  const errorMsg({super.key});
+
+  @override
+  State<errorMsg> createState() => _errorMsgState();
+}
+
+class _errorMsgState extends State<errorMsg> {
+  @override
+  Widget build(BuildContext context) {
+
+    Text msg = Text("error login faild");
+
+    ElevatedButton e = ElevatedButton(onPressed: (){
+      Navigator.pushNamed(context, "/login");
+    }, child:Text("Back to login"));
+
+    SizedBox sizedBox = SizedBox(height: 20,);
+    Column column = Column(children: [msg, sizedBox , e],);
+
+    Scaffold scaffold = Scaffold(appBar: AppBar(title: Text("back"),) , body: Center(child: column,),);
+
+    return MaterialApp(home: scaffold,);
+
+  }
+}

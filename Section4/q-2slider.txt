@@ -1,0 +1,67 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  double a =1 , b =1 , c=1;
+  String result = "";
+
+  @override
+  Widget build(BuildContext context) {
+
+    Column s1= Column(children: [
+      Text("a ${a.toInt()}"),
+      Slider(value: a,max: 5,min: 1, divisions: 4, onChanged:(val){
+        setState(() {
+          a = val;
+        });
+      })
+    ],);
+
+    Column s2 = Column(children: [
+      Text("b ${b.toInt()}"),
+      Slider(value: b, min: 1, max: 5, divisions: 4, onChanged: (val){
+        setState(() {
+          b =val;
+        });
+      })
+    ],);
+
+    Column s3 = Column(children: [
+      Text("c ${c.toInt()}"),
+      Slider(value: c,min: 1, max: 5, divisions: 4, onChanged: (val) {
+        setState(() {
+          c=val;
+        });
+      }),
+
+    ],);
+
+    ElevatedButton btn = ElevatedButton(onPressed: (){
+      double max = a;
+      if(b>max) max =b;
+      if(c>max) max =c;
+      setState(() {
+        result = "MAx = ${max.toInt()}";
+      });
+
+    }, child: Text("Max display"));
+
+Text  t =Text(result);
+    SizedBox sizedBox =SizedBox (height: 20,);
+    Column col = Column(children: [s1 , sizedBox , s2, sizedBox , s3 , sizedBox , btn, t],);
+    Scaffold scaffold = Scaffold(appBar: AppBar(title: Text("Max"),backgroundColor: Colors.tealAccent,),body: Center(child: col,),);
+    return MaterialApp(home: scaffold,);
+
+  }
+}

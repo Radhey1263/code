@@ -1,0 +1,92 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  TextEditingController  textEditingController =  TextEditingController();
+
+
+  List<TextEditingController>pin =
+  List.generate(4, (index) => TextEditingController());
+
+  String  msg = "";
+  @override
+  Widget build(BuildContext context) {
+    // user name
+
+    TextField Username = TextField(controller: textEditingController, decoration: InputDecoration(labelText: "Username"),);
+
+    // pin box
+
+    Row pinbox = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(4, (i)
+      {
+        return SizedBox( width: 40 , child: TextField(controller: pin[i],maxLength: 1,textAlign: TextAlign.center,keyboardType: TextInputType.number,decoration: InputDecoration(counterText: ""),),);
+      }),
+    );
+
+
+
+
+    // login button
+    ElevatedButton login = ElevatedButton(onPressed: (){
+
+      String user = textEditingController.text;
+      String p = pin.map((e) => e.text).join();
+
+
+      if(user == "admin" && p == "2121")
+      {
+        setState(() {
+          msg = "WelCome";
+        });
+      }
+      else {
+        setState(() {
+          msg = "Invalid";
+        });
+      }
+    }, child: Text("Login"));
+
+// reset button
+    ElevatedButton Reset = ElevatedButton(onPressed: (){
+
+      textEditingController.clear();
+      for(var i in pin)
+      {
+        i.clear();
+      }
+      setState(() {
+        msg ="";
+      });
+    }, child: Text("Reset"));
+
+    Row button  = Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [login, Reset],);
+    Text message = Text(msg);
+
+    SizedBox space = SizedBox(height: 20,);
+    Column column = Column(mainAxisAlignment: MainAxisAlignment.center, children: [Username,space , pinbox,space, button , space , message],);
+
+
+
+
+    Scaffold scaffold = Scaffold(
+      body: Center(child: column,),
+    );
+
+    return MaterialApp(home: scaffold, debugShowCheckedModeBanner: false,);
+  }
+}
+
+
